@@ -13,6 +13,8 @@ public partial class Expense
 
     public int UserId { get; set; }
 
+    public int WalletId { get; set; }
+
     public int? CategoryId { get; set; }
 
     [Column(TypeName = "decimal(18, 2)")]
@@ -31,4 +33,8 @@ public partial class Expense
     [ForeignKey("UserId")]
     [InverseProperty("Expenses")]
     public virtual User User { get; set; } = null!;
+
+    [ForeignKey("WalletId")]
+    [InverseProperty("Expenses")]
+    public virtual Wallet Wallet { get; set; } = null!;
 }

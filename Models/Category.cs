@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Models;
-
 public partial class Category
 {
     [Key]

@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Models;
 
-[Index("Username", Name = "UQ__Users__536C85E47A74EA50", IsUnique = true)]
-[Index("Email", Name = "UQ__Users__A9D10534313FF9E0", IsUnique = true)]
 public partial class User
 {
     [Key]
@@ -27,6 +25,9 @@ public partial class User
 
     [InverseProperty("User")]
     public virtual ICollection<Expense> Expenses { get; set; } = new List<Expense>();
+
+    [InverseProperty("User")]
+    public virtual ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
 
     [ForeignKey("UserId")]
     [InverseProperty("Users")]

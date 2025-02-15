@@ -5,16 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Models;
-
-public partial class Role
+public partial class WalletType
 {
     [Key]
-    public int RoleId { get; set; }
+    public int WalletTypeId { get; set; }
 
     [StringLength(50)]
-    public string RoleName { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-    [ForeignKey("RoleId")]
-    [InverseProperty("Roles")]
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    [InverseProperty("WalletType")]
+    public virtual ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
 }
