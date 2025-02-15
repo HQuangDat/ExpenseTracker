@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ExpenseTracker.Controllers
 {
-    public class ExpenseController : Controller
+    public class WalletController : Controller
     {
         [HttpGet]
         public IActionResult Add()

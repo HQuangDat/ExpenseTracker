@@ -6,7 +6,19 @@ namespace ExpenseTracker.Controllers
     public class AccountController : Controller
     {
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Edit()
+        {
+            return View();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete()
         {
             return View();
         }
