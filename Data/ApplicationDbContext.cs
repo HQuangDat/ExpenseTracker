@@ -28,6 +28,7 @@ namespace ExpenseTracker.Data
                 entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0B17940A7A");
             });
 
+
             modelBuilder.Entity<Expense>(entity =>
             {
                 entity.HasKey(e => e.ExpenseId).HasName("PK__Expenses__1445CFD3FABE84A3");
