@@ -13,22 +13,42 @@ namespace ExpenseTracker.Controllers
             _db = db;
         }
 
+        //This method will return the view for the add new User page
         [HttpGet]
-        public IActionResult Add()
+        public IActionResult Register()
         {
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Register(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Users.Add(user);
+                _db.SaveChanges();
+                return RedirectToAction("List");
+            }
+            return View(user);
+        }
+
+        //This method will return the view for the Edit Account page
         [HttpGet]
         public IActionResult Edit()
         {
             return View();
         }
 
-
+        //This method will delete the user from the database
         [HttpDelete]
-        public IActionResult Delete()
+        public IActionResult Delete(User user)
         {
+            if(ModelState.IsValid)
+            {
+                _db.Users.Remove(user);
+                _db.SaveChanges();
+                return RedirectToRoute("Home","Index");
+            }
             return View();
         }
 

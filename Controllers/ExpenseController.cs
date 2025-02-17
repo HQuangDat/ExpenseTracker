@@ -25,8 +25,14 @@ namespace ExpenseTracker.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete()
+        public IActionResult Delete(Expense expense)
         {
+            if(ModelState.IsValid)
+            {
+                _db.Expenses.Remove(expense);
+                _db.SaveChanges();
+                return RedirectToRoute("Home", "Index");
+            }
             return View();
         }
 

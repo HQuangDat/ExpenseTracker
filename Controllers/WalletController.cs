@@ -12,11 +12,32 @@ namespace ExpenseTracker.Controllers
             _db = db;
         }
 
+        //This method will return the view for the add new Wallet page
         [HttpGet]
         public IActionResult Add()
         {
             return View();
         }
+
+        //And this method will return the view for the add new  Wallet type page
+        [HttpGet]
+        public IActionResult AddType()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddType(WalletType walletType)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.WalletTypes.Add(walletType);
+                _db.SaveChanges();
+                return RedirectToAction("List");
+            }
+            return View(walletType);
+        }
+
 
         [HttpGet]
         public IActionResult Edit()
@@ -25,8 +46,14 @@ namespace ExpenseTracker.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete()
+        public IActionResult Delete(Wallet wallet)
         {
+            if(ModelState.IsValid)
+            {
+                _db.Wallets.Remove(wallet);
+                _db.SaveChanges();
+                return RedirectToRoute("Home", "Index");
+            }
             return View();
         }
 
