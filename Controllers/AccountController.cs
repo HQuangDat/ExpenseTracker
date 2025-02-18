@@ -1,5 +1,6 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -13,7 +14,7 @@ namespace ExpenseTracker.Controllers
             _db = db;
         }
 
-        //This method will return the view for the add new User page
+        //This method will return the view for the Register page
         [HttpGet]
         public IActionResult Register()
         {
@@ -32,11 +33,28 @@ namespace ExpenseTracker.Controllers
             return View(user);
         }
 
-        //This method will return the view for the Edit Account page
+        //These two methods will edit the user in the database
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int? id)
         {
-            return View();
+            if(id == null)
+                return NotFound();
+            User user = _db.Users.Find(id);
+            if(user == null)
+                return NotFound();
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Users.Update(user);
+                _db.SaveChanges();
+                return RedirectToAction("List");
+            }
+            return View(user);
         }
 
         //This method will delete the user from the database
@@ -52,7 +70,7 @@ namespace ExpenseTracker.Controllers
             return View();
         }
 
-
+        //This method will return the view for the list of users
         [HttpGet]
         public IActionResult List()
         {
@@ -61,9 +79,14 @@ namespace ExpenseTracker.Controllers
         }
 
         [HttpGet]
-        public IActionResult Information()
+        public IActionResult Information(int? id)
         {
-            return View();
+            if (id == null)
+                return NotFound();
+            User user = _db.Users.Find(id);
+            if (user == null)
+                return NotFound();
+            return View(user);
         }
     }
 }

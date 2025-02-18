@@ -152,7 +152,7 @@
             </nav>
 
             <div class="content">
-                @RenderBody();
+                @RenderBody()
             </div>
 
             <footer class="footer">
@@ -180,10 +180,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </nav>
-                    <p class="copyright pull-right">
-                        @DateTime.Now.Year
-                    </p>
+                    </nav> 
                 </div>
             </footer>
         </div>
@@ -199,8 +196,6 @@
     <!-- Notifications Plugin -->
     <script src="~/js/bootstrap-notify.js"></script>
 
-    <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
-    <script src="~/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -218,6 +213,12 @@
 
         });
     </script>
+
+    @section Scripts{
+        @{
+            <partial name = "_ValidationScriptsPartial"/>
+        }
+    }
 
     @RenderSection("Scripts", required: false)
 

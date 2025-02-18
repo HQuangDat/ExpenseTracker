@@ -15,6 +15,7 @@ public partial class User
     public string Username { get; set; } = null!;
 
     [StringLength(100)]
+    [EmailAddress(ErrorMessage = "You must enter a valid email address!")]
     public string Email { get; set; } = null!;
 
     [StringLength(255)]

@@ -11,6 +11,9 @@
     <div class="col-6 text-end">
         <a class="btn btn-primary" asp-action="Add">Create New</a>
     </div>
+    <div class="col-6 text-end">
+        <a class="btn btn-primary" asp-action="AddType">Create new wallet type</a>
+    </div>
 </p>
 <table class="table table-responsive table-hover text-center">
     <thead>
@@ -52,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.WalletType.WalletTypeId)
             </td>
             <td>
-                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                    <a class="btn btn-secondary" asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                    <a class="btn btn-warning" asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.WalletId" asp-route-id="@item.UserId">Edit</a> |
+                    <a class="btn btn-secondary" asp-action="Details" asp-route-id="@item.WalletId" asp-route-id="@item.UserId">Details</a> |
+                    <a class="btn btn-warning" asp-action="Delete" asp-route-id="@item.WalletId" asp-route-id="@item.UserId">Delete</a>
             </td>
         </tr>
 }

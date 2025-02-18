@@ -1,6 +1,7 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ExpenseTracker.Controllers
 {
@@ -12,18 +13,38 @@ namespace ExpenseTracker.Controllers
             _db = db;
         }
 
+        //This method will return the view for the Add Expense page
         [HttpGet]
         public IActionResult Add()
         {
             return View();
         }
 
+        //These two methods will edit the expense in the database
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+                return NotFound();
+            Expense expense = _db.Expenses.Find(id);
+            if (expense == null)
+                return NotFound();
+            return View(expense);
         }
 
+        [HttpPost]
+        public IActionResult Edit(Expense expense)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Expenses.Update(expense);
+                _db.SaveChanges();
+                return RedirectToAction("List");
+            }
+            return View(expense);
+        }
+
+        //This method will delete the expense from the database
         [HttpDelete]
         public IActionResult Delete(Expense expense)
         {
@@ -36,6 +57,7 @@ namespace ExpenseTracker.Controllers
             return View();
         }
 
+        //This method will return the view for the list of expenses
         [HttpGet]
         public IActionResult List()
         {
@@ -44,9 +66,14 @@ namespace ExpenseTracker.Controllers
         }
 
         [HttpGet]
-        public IActionResult Information()
+        public IActionResult Information(int? id)
         {
-            return View();
+            if (id == null)
+                return NotFound();
+            Expense expense = _db.Expenses.Find(id);
+            if (expense == null)
+                return NotFound();
+            return View(expense);
         }
     }
 }
