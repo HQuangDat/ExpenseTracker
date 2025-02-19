@@ -33,6 +33,7 @@ namespace ExpenseTracker.Controllers
             {
                 _db.WalletTypes.Add(walletType);
                 _db.SaveChanges();
+                TempData["success"] = "Wallet type added successfully";
                 return RedirectToAction("List");
             }
             return View(walletType);
@@ -57,6 +58,7 @@ namespace ExpenseTracker.Controllers
             {
                 _db.Wallets.Update(wallet);
                 _db.SaveChanges();
+                TempData["success"] = "Wallet updated successfully";
                 return RedirectToAction("List");
             }
             return View(wallet);
@@ -80,6 +82,7 @@ namespace ExpenseTracker.Controllers
             {
                 _db.WalletTypes.Update(walletType);
                 _db.SaveChanges();
+                TempData["success"] = "Wallet type updated successfully";
                 return RedirectToAction("List");
             }
             return View(walletType);
@@ -92,6 +95,7 @@ namespace ExpenseTracker.Controllers
             {
                 _db.Wallets.Remove(wallet);
                 _db.SaveChanges();
+                TempData["success"] = "Wallet deleted successfully";
                 return RedirectToRoute("Home", "Index");
             }
             return View();

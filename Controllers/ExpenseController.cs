@@ -39,6 +39,7 @@ namespace ExpenseTracker.Controllers
             {
                 _db.Expenses.Update(expense);
                 _db.SaveChanges();
+                TempData["success"] = "Expense updated successfully";
                 return RedirectToAction("List");
             }
             return View(expense);
@@ -52,6 +53,7 @@ namespace ExpenseTracker.Controllers
             {
                 _db.Expenses.Remove(expense);
                 _db.SaveChanges();
+                TempData["success"] = "Expense deleted successfully";
                 return RedirectToRoute("Home", "Index");
             }
             return View();

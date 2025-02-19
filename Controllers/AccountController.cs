@@ -1,13 +1,13 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ExpenseTracker.Controllers
 {
     public class AccountController : Controller
     {
+
         private readonly ApplicationDbContext _db;
         public AccountController(ApplicationDbContext db)
         {
@@ -28,6 +28,7 @@ namespace ExpenseTracker.Controllers
             {
                 _db.Users.Add(user);
                 _db.SaveChanges();
+                TempData["success"] = "User registered successfully";
                 return RedirectToAction("List");
             }
             return View(user);
@@ -52,6 +53,7 @@ namespace ExpenseTracker.Controllers
             {
                 _db.Users.Update(user);
                 _db.SaveChanges();
+                TempData["success"] = "User updated successfully";
                 return RedirectToAction("List");
             }
             return View(user);
@@ -65,6 +67,7 @@ namespace ExpenseTracker.Controllers
             {
                 _db.Users.Remove(user);
                 _db.SaveChanges();
+                TempData["success"] = "User deleted successfully";
                 return RedirectToRoute("Home","Index");
             }
             return View();
