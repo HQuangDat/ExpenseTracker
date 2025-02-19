@@ -49,13 +49,13 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryId)
+                @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
+                @Html.DisplayFor(modelItem => item.User.Username)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Wallet.WalletId)
+                @Html.DisplayFor(modelItem => item.Wallet.Name)
             </td>
             <td>
                     <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ExpenseId" asp-route-id="@item.UserId">Edit</a> |

@@ -1,6 +1,8 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace ExpenseTracker.Controllers
@@ -26,9 +28,16 @@ namespace ExpenseTracker.Controllers
         {
             if (id == null)
                 return NotFound();
-            Expense expense = _db.Expenses.Find(id);
+            Expense expense = _db.Expenses
+                .Include(ctg => ctg.Category)
+                .Include(wl => wl.Wallet)
+                .Include(us=>us.User)
+                .FirstOrDefault(exp=>exp.CategoryId == id);
             if (expense == null)
                 return NotFound();
+
+            ViewBag.CategoryId = new SelectList(_db.Categories,"CategoryId","Name",expense.ExpenseId);
+            ViewBag.WalletId = new SelectList(_db.Wallets, "WalletId", "Name", expense.ExpenseId);
             return View(expense);
         }
 
@@ -65,7 +74,11 @@ namespace ExpenseTracker.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            List<Expense> expenseList = _db.Expenses.ToList();
+            List<Expense> expenseList = _db.Expenses
+                .Include(ct=>ct.Category)
+                .Include(wl=>wl.Wallet)
+                .Include(us=>us.User)
+                .ToList();
             return View(expenseList);
         }
 
