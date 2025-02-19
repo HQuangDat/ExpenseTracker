@@ -28,19 +28,22 @@ namespace ExpenseTracker.Data
                 entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0B17940A7A");
             });
 
-
             modelBuilder.Entity<Expense>(entity =>
             {
                 entity.HasKey(e => e.ExpenseId).HasName("PK__Expenses__1445CFD3FABE84A3");
 
-                entity.HasOne(d => d.Category).WithMany(p => p.Expenses).HasConstraintName("FK__Expenses__Catego__5070F446");
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Expenses)
+                    .HasConstraintName("FK__Expenses__Catego__5070F446");
 
-                entity.HasOne(d => d.User).WithMany(p => p.Expenses)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Expenses)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK__Expenses__UserId__4E88ABD4");
 
-                entity.HasOne(d => d.Wallet).WithMany(p => p.Expenses)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                entity.HasOne(d => d.Wallet)
+                    .WithMany(p => p.Expenses)
+                    .OnDelete(DeleteBehavior.Cascade) // Expenses should be deleted if the Wallet is deleted
                     .HasConstraintName("FK__Expenses__Wallet__4F7CD00D");
             });
 
@@ -55,16 +58,17 @@ namespace ExpenseTracker.Data
 
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
-                entity.HasMany(d => d.Roles).WithMany(p => p.Users)
+                entity.HasMany(d => d.Roles)
+                    .WithMany(p => p.Users)
                     .UsingEntity<Dictionary<string, object>>(
                         "UserRole",
                         r => r.HasOne<Role>().WithMany()
                             .HasForeignKey("RoleId")
-                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .OnDelete(DeleteBehavior.Cascade) // If a Role is deleted, its UserRoles should be removed
                             .HasConstraintName("FK__UserRoles__RoleI__403A8C7D"),
                         l => l.HasOne<User>().WithMany()
                             .HasForeignKey("UserId")
-                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .OnDelete(DeleteBehavior.Cascade) // If a User is deleted, their UserRoles should be removed
                             .HasConstraintName("FK__UserRoles__UserI__3F466844"),
                         j =>
                         {
@@ -79,12 +83,14 @@ namespace ExpenseTracker.Data
 
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
-                entity.HasOne(d => d.User).WithMany(p => p.Wallets)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Wallets)
+                    .OnDelete(DeleteBehavior.Restrict) 
                     .HasConstraintName("FK__Wallets__UserId__47DBAE45");
 
-                entity.HasOne(d => d.WalletType).WithMany(p => p.Wallets)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                entity.HasOne(d => d.WalletType)
+                    .WithMany(p => p.Wallets)
+                    .OnDelete(DeleteBehavior.Cascade) // If a WalletType is deleted, its Wallets should be removed
                     .HasConstraintName("FK__Wallets__WalletT__48CFD27E");
             });
 
@@ -95,6 +101,7 @@ namespace ExpenseTracker.Data
 
             OnModelCreatingPartial(modelBuilder);
         }
+
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

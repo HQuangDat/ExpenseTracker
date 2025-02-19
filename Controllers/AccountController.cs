@@ -26,6 +26,7 @@ namespace ExpenseTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Roles.Add(_db.Roles.Find(2));
                 _db.Users.Add(user);
                 _db.SaveChanges();
                 TempData["success"] = "User registered successfully";
@@ -60,17 +61,19 @@ namespace ExpenseTracker.Controllers
         }
 
         //This method will delete the user from the database
-        [HttpDelete]
-        public IActionResult Delete(User user)
+        [HttpPost]
+        public IActionResult Delete(int? id)
         {
-            if(ModelState.IsValid)
+            User user = _db.Users.Find(id);
+            if (user == null)
             {
-                _db.Users.Remove(user);
-                _db.SaveChanges();
-                TempData["success"] = "User deleted successfully";
-                return RedirectToRoute("Home","Index");
+                TempData["error"] = "User not found";
+                return NotFound();
             }
-            return View();
+            _db.Users.Remove(user);
+            _db.SaveChanges();
+            TempData["success"] = "User deleted successfully";
+            return RedirectToAction("List");
         }
 
         //This method will return the view for the list of users

@@ -88,17 +88,20 @@ namespace ExpenseTracker.Controllers
             return View(walletType);
         }
 
-        [HttpDelete]
-        public IActionResult Delete(Wallet wallet)
+        //Delete wallet function
+        [HttpPost]
+        public IActionResult Delete(int? id)
         {
-            if(ModelState.IsValid)
+            Wallet wallet = _db.Wallets.Find(id);
+            if(wallet == null)
             {
-                _db.Wallets.Remove(wallet);
-                _db.SaveChanges();
-                TempData["success"] = "Wallet deleted successfully";
-                return RedirectToRoute("Home", "Index");
+                TempData["error"] = "Wallet not found";
+                return NotFound();
             }
-            return View();
+            _db.Wallets.Remove(wallet);
+            _db.SaveChanges();
+            TempData["success"] = "Wallet deleted successfully";
+            return RedirectToAction("List");
         }
 
         [HttpGet]

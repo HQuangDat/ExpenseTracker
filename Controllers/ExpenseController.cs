@@ -47,16 +47,18 @@ namespace ExpenseTracker.Controllers
 
         //This method will delete the expense from the database
         [HttpDelete]
-        public IActionResult Delete(Expense expense)
+        public IActionResult Delete(int? id)
         {
-            if(ModelState.IsValid)
+            if(id == null)
             {
-                _db.Expenses.Remove(expense);
-                _db.SaveChanges();
-                TempData["success"] = "Expense deleted successfully";
-                return RedirectToRoute("Home", "Index");
+                TempData["error"] = "Expense not found";
+                return NotFound();
             }
-            return View();
+            Expense expense = _db.Expenses.Find(id);
+            _db.Expenses.Remove(expense);
+            _db.SaveChanges();
+            TempData["success"] = "Expense deleted successfully";
+            return RedirectToAction("List");
         }
 
         //This method will return the view for the list of expenses
