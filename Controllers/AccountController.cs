@@ -9,9 +9,11 @@ namespace ExpenseTracker.Controllers
     {
 
         private readonly ApplicationDbContext _db;
-        public AccountController(ApplicationDbContext db)
+        private readonly IPasswordHasher<User> _passwordHasher;
+        public AccountController(ApplicationDbContext db, IPasswordHasher<User> passwordHasher)
         {
             _db = db;
+            _passwordHasher = passwordHasher;
         }
 
         //This method will return the view for the Register page
@@ -26,6 +28,7 @@ namespace ExpenseTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.PasswordHash = _passwordHasher.HashPassword(user,user.PasswordHash);
                 user.Roles.Add(_db.Roles.Find(2));
                 _db.Users.Add(user);
                 _db.SaveChanges();

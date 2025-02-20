@@ -1,4 +1,6 @@
 using ExpenseTracker.Data;
+using ExpenseTracker.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker
@@ -14,6 +16,7 @@ namespace ExpenseTracker
             builder.Services.AddDbContext<ApplicationDbContext>(options => 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();// Add PasswordHasher service
 
             var app = builder.Build();
 

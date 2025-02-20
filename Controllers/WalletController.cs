@@ -53,7 +53,6 @@ namespace ExpenseTracker.Controllers
                 .FirstOrDefault(wl => wl.WalletId == id);
             if (wallet == null)
                 return NotFound();
-            ViewBag.UserId = wallet.UserId;
             ViewBag.WalletTypeId = new SelectList(_db.WalletTypes, "WalletTypeId", "Name", wallet.WalletTypeId);
             return View(wallet);
         }
@@ -63,11 +62,18 @@ namespace ExpenseTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                //var editWallet = _db.Wallets.Find(wallet.WalletId);
+                //editWallet.Name = wallet.Name;
+                //editWallet.Balance = wallet.Balance;
+                //editWallet.WalletTypeId = wallet.WalletTypeId;
+                //editWallet.CreatedAt = wallet.CreatedAt;
                 _db.Wallets.Update(wallet);
                 _db.SaveChanges();
                 TempData["success"] = "Wallet updated successfully";
                 return RedirectToAction("List");
             }
+            TempData["error"] = "Something wrong with the edit!";
+            ViewBag.WalletTypeId = new SelectList(_db.WalletTypes, "WalletTypeId", "Name", wallet.WalletTypeId);
             return View(wallet);
         }
 
