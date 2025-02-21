@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Models;
@@ -32,9 +33,11 @@ public partial class Expense
 
     [ForeignKey("UserId")]
     [InverseProperty("Expenses")]
+    [ValidateNever]
     public virtual User User { get; set; } = null!;
 
     [ForeignKey("WalletId")]
     [InverseProperty("Expenses")]
+    [ValidateNever]
     public virtual Wallet Wallet { get; set; } = null!;
 }

@@ -19,9 +19,27 @@ namespace ExpenseTracker.Controllers
         [HttpGet]
         public IActionResult Add()
         {
+            ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+            ViewBag.WalletId = new SelectList(_db.Wallets, "WalletId", "Name");
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Add(Expense expense)
+        {
+            if(ModelState.IsValid)
+            {
+                _db.Expenses.Add(expense);
+                _db.SaveChanges();
+                TempData["success"] = "Expense added successfully";
+                return RedirectToAction("List");
+            }
+
+            TempData.Add("error", "Error adding expense");
+            ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name", expense.CategoryId);
+            ViewBag.WalletId = new SelectList(_db.Wallets, "WalletId", "Name", expense.WalletId);
+            return View(expense);
+        }
         //These two methods will edit the expense in the database
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -32,7 +50,7 @@ namespace ExpenseTracker.Controllers
                 .Include(ctg => ctg.Category)
                 .Include(wl => wl.Wallet)
                 .Include(us=>us.User)
-                .FirstOrDefault(exp=>exp.CategoryId == id);
+                .FirstOrDefault(exp=>exp.ExpenseId == id);
             if (expense == null)
                 return NotFound();
 
@@ -51,6 +69,9 @@ namespace ExpenseTracker.Controllers
                 TempData["success"] = "Expense updated successfully";
                 return RedirectToAction("List");
             }
+            ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name", expense.ExpenseId);
+            ViewBag.WalletId = new SelectList(_db.Wallets, "WalletId", "Name", expense.ExpenseId);
+            TempData["error"] = "Error updating expense";
             return View(expense);
         }
 
