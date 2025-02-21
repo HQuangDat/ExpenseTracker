@@ -145,8 +145,8 @@ const isVisible = element => {
     return false;
   }
   const elementIsVisible = getComputedStyle(element).getPropertyValue('visibility') === 'visible';
-  // Handle `details` element as its content may falsie appear visible when it is closed
-  const closedDetails = element.closest('details:not([open])');
+  // Handle `Information` element as its content may falsie appear visible when it is closed
+  const closedDetails = element.closest('Information:not([open])');
   if (!closedDetails) {
     return elementIsVisible;
   }
@@ -769,7 +769,7 @@ const SelectorEngine = {
     return [];
   },
   focusableChildren(element) {
-    const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(',');
+    const focusables = ['a', 'button', 'input', 'textarea', 'select', 'Information', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(',');
     return this.find(focusables, element).filter(el => !isDisabled(el) && isVisible(el));
   },
   getSelectorFromElement(element) {

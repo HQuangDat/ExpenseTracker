@@ -108,7 +108,10 @@ namespace ExpenseTracker.Controllers
         {
             if (id == null)
                 return NotFound();
-            Expense expense = _db.Expenses.Find(id);
+            Expense expense = _db.Expenses.Include(us=>us.User)
+                .Include(wl=>wl.Wallet)
+                .Include(ct=>ct.Category)
+                .FirstOrDefault(ex=>ex.ExpenseId == id);
             if (expense == null)
                 return NotFound();
             return View(expense);

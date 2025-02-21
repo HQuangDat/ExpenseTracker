@@ -2,11 +2,11 @@ $prefixes: ('', '-moz-', '-webkit-', '-ms-') !default;
 
 @mixin circle-animation(){
    @for $i from 0 to length($prefixes) {
-        @include circle-animation-details(nth($prefixes, $i + 1));
+        @include circle-animation-Information(nth($prefixes, $i + 1));
    }  
 }
 
-@mixin circle-animation-details($name){
+@mixin circle-animation-Information($name){
     #{$name}animation-name: spin;
     #{$name}animation-duration: 1250ms;
     #{$name}animation-iteration-count: infinite;

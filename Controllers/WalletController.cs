@@ -126,13 +126,13 @@ namespace ExpenseTracker.Controllers
             return View(walletList);
         }
 
-        //This is for detail information of wallet
+        //This is for Information  of wallet
         [HttpGet]
         public IActionResult Information(int? id)
         {
             if (id == null)
                 return NotFound();
-            Wallet wallet = _db.Wallets.Find(id);
+            Wallet wallet = _db.Wallets.Include(us=>us.User).Include(wlt=>wlt.WalletType).FirstOrDefault(wl=>wl.WalletId == id);
             if (wallet == null)
                 return NotFound();
             return View(wallet);
