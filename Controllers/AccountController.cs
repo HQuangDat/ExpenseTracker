@@ -32,7 +32,8 @@ namespace ExpenseTracker.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            User existUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            User existUser = await _db.Users.Include(role=>role.Roles)
+                .FirstOrDefaultAsync(u => u.Email == email);
             if (existUser != null)
             {
                 PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(existUser, existUser.PasswordHash, password);
