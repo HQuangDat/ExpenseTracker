@@ -1,7 +1,12 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Controllers
 {
@@ -14,6 +19,58 @@ namespace ExpenseTracker.Controllers
         {
             _db = db;
             _passwordHasher = passwordHasher;
+        }
+
+        //This is the Login method
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            User existUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (existUser != null)
+            {
+                PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(existUser, existUser.PasswordHash, password);
+                if (result == PasswordVerificationResult.Success)
+                {
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, existUser.Email),
+                        new Claim(ClaimTypes.Role, existUser.Roles.FirstOrDefault().RoleName),
+                        new Claim(ClaimTypes.NameIdentifier, existUser.UserId.ToString())
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
+                    };
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
+
+                    TempData["success"] = "Login successful";
+                    return RedirectToAction("List", "Expense");
+                }
+            }
+            TempData["error"] = "Invalid email or password";
+            return View();
+        }
+
+        //This is Logout method
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+           await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+           return RedirectToAction("Login");
         }
 
         //This method will return the view for the Register page
@@ -33,8 +90,10 @@ namespace ExpenseTracker.Controllers
                 _db.Users.Add(user);
                 _db.SaveChanges();
                 TempData["success"] = "User registered successfully";
-                return RedirectToAction("List");
+                return RedirectToAction("Login");
             }
+
+            TempData["error"] = "User registration failed, please check your information"; 
             return View(user);
         }
 
@@ -96,6 +155,14 @@ namespace ExpenseTracker.Controllers
             if (user == null)
                 return NotFound();
             return View(user);
+        }
+
+
+        //This method will return the view for the AccessDenied page
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

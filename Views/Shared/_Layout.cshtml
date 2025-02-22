@@ -43,30 +43,48 @@
                             <p>Home</p>
                         </a>
                     </li>
-                    <li>
-                        <a asp-controller="Account" asp-action="Information" style="text-decoration:none">
-                            <i class="pe-7s-user"></i>
-                            <p>User Profile</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Wallet" asp-action="List" style="text-decoration:none">
-                            <i class="pe-7s-note2"></i>
-                            <p>Wallet</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="typography.html" style="text-decoration:none">
-                            <i class="pe-7s-news-paper"></i>
-                            <p>Statistic</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Expense" asp-action="List" style="text-decoration:none">
-                            <i class="pe-7s-science"></i>
-                            <p>Expense</p>
-                        </a>
-                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <a asp-controller="Account" asp-action="Information" style="text-decoration:none">
+                                <i class="pe-7s-user"></i>
+                                <p>User Profile</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Wallet" asp-action="List" style="text-decoration:none">
+                                <i class="pe-7s-note2"></i>
+                                <p>Wallet</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="typography.html" style="text-decoration:none">
+                                <i class="pe-7s-news-paper"></i>
+                                <p>Statistic</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Expense" asp-action="List" style="text-decoration:none">
+                                <i class="pe-7s-science"></i>
+                                <p>Expense</p>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a asp-controller="Account" asp-action="Login" style="text-decoration:none">
+                                <i class="pe-7s-user"></i>
+                                <p>Login</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Account" asp-action="Register" style="text-decoration:none">
+                                <i class="pe-7s-note2"></i>
+                                <p>Register</p>
+                            </a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

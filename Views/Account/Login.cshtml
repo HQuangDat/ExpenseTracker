@@ -1,0 +1,35 @@
+﻿@model ExpenseTracker.Models.User
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Login</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PasswordHash" class="form-label"></label>
+                            <input asp-for="PasswordHash" class="form-control" type="password" />
+                            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                        </div>
+                        @* <div class="mb-3 form-check"> *@
+                        @*     <input asp-for="Input.RememberMe" class="form-check-input" type="checkbox" /> *@
+                        @*     <label asp-for="Input.RememberMe" class="form-check-label"></label> *@
+                        @* </div> *@
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
