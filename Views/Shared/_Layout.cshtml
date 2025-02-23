@@ -46,7 +46,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>
-                            <a asp-controller="Account" asp-action="Information"  style="text-decoration:none">
+                            <a asp-controller="Account" asp-action="Information" style="text-decoration:none">
                                 <i class="pe-7s-user"></i>
                                 <p>User Profile</p>
                             </a>
@@ -70,7 +70,7 @@
                             </a>
                         </li>
                         <li>
-                            <form asp-action="Logout" method="post" style="display:inline;">
+                            <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Do you want to logout?');">
                                     Logout
                                 </button>

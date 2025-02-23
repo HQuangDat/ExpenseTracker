@@ -26,13 +26,13 @@ namespace ExpenseTracker
                     {
                         options.LoginPath = "/Account/Login";
                         options.LogoutPath = "/Account/Logout";
-                        //options.AccessDeniedPath = "/Account/AccessDenied";
+                        options.AccessDeniedPath = "/Account/AccessDenied";
                     });
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("User", policy => policy.RequireRole("User"));
+                options.AddPolicy("Admin", policy => policy.RequireClaim("Role","Admin"));
+                options.AddPolicy("User", policy => policy.RequireClaim("Role","User"));
             });
 
             var app = builder.Build();
