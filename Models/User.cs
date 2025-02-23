@@ -15,10 +15,12 @@ public partial class User
     public string Username { get; set; } = null!;
 
     [StringLength(100)]
+    [Required]
     [EmailAddress(ErrorMessage = "You must enter a valid email address!")]
     public string Email { get; set; } = null!;
 
     [StringLength(255)]
+    [Required]
     public string PasswordHash { get; set; } = null!;
 
     [Column(TypeName = "datetime")]

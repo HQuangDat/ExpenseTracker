@@ -1,3 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@if(User.Identity.IsAuthenticated)
+{
+    <h1>Welcome to Expense Tracker!</h1>
+    <h1>Greeting, @User.Identity.Name!</h1>
+}
+else
+{
+    <h1>Welcome to Expense Tracker!</h1>
+}
