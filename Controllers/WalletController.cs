@@ -1,11 +1,14 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace ExpenseTracker.Controllers
 {
+    [Authorize]
     public class WalletController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -18,6 +21,23 @@ namespace ExpenseTracker.Controllers
         [HttpGet]
         public IActionResult Add()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userId;
+            ViewBag.WalletTypeId = new SelectList(_db.WalletTypes, "WalletTypeId", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Add(Wallet wallet)
+        {
+            if(ModelState.IsValid)
+            {
+                _db.Wallets.Add(wallet);
+                _db.SaveChanges();
+                TempData["success"] = "Wallet added successfully";
+                return RedirectToAction("List");
+            }
+            TempData["error"] = "Error adding wallet";          
             return View();
         }
 
@@ -72,7 +92,10 @@ namespace ExpenseTracker.Controllers
                 TempData["success"] = "Wallet updated successfully";
                 return RedirectToAction("List");
             }
+
             TempData["error"] = "Something wrong with the edit!";
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userId;
             ViewBag.WalletTypeId = new SelectList(_db.WalletTypes, "WalletTypeId", "Name", wallet.WalletTypeId);
             return View(wallet);
         }
@@ -120,8 +143,10 @@ namespace ExpenseTracker.Controllers
         [HttpGet]
         public IActionResult List()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             List<Wallet> walletList = _db.Wallets.Include(wlt => wlt.WalletType)
-                .Include(u => u.User)
+                .Include(u => u.User).Where(us=>Convert.ToString(us.UserId) == userId)
                 .ToList();
             return View(walletList);
         }

@@ -13,9 +13,12 @@
         <div class="col-6 text-end">
             <a class="btn btn-primary" asp-action="Add">Create New</a>
         </div>
-        <div class="col-6 text-end">
-            <a class="btn btn-primary" asp-action="AddType">Create new wallet type</a>
-        </div>
+        @if(User.Identity.AuthenticationType == "Admin")
+        {
+            <div class="col-6 text-end">
+                <a class="btn btn-primary" asp-action="AddType">Create new wallet type</a>
+            </div>
+        }
     </p>
     <table class="table table-responsive table-hover text-center">
         <thead>

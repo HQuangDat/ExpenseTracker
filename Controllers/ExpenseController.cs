@@ -1,12 +1,15 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Security.Claims;
 
 namespace ExpenseTracker.Controllers
 {
+    [Authorize]
     public class ExpenseController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -19,25 +22,31 @@ namespace ExpenseTracker.Controllers
         [HttpGet]
         public IActionResult Add()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userWallets = _db.Wallets.Where(us =>Convert.ToString(us.UserId) == userId).ToList();
+            ViewBag.UserId = userId;
             ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
-            ViewBag.WalletId = new SelectList(_db.Wallets, "WalletId", "Name");
+            ViewBag.WalletId = new SelectList(userWallets, "WalletId", "Name");
             return View();
         }
 
         [HttpPost]
         public IActionResult Add(Expense expense)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _db.Expenses.Add(expense);
                 _db.SaveChanges();
                 TempData["success"] = "Expense added successfully";
                 return RedirectToAction("List");
             }
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userId;
             TempData.Add("error", "Error adding expense");
-            ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name", expense.CategoryId);
-            ViewBag.WalletId = new SelectList(_db.Wallets, "WalletId", "Name", expense.WalletId);
+            var userWallets = _db.Wallets.Where(us => Convert.ToString(us.UserId) == userId).ToList();
+            ViewBag.UserId = userId;
+            ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+            ViewBag.WalletId = new SelectList(userWallets, "WalletId", "Name");
             return View(expense);
         }
         //These two methods will edit the expense in the database
@@ -45,7 +54,10 @@ namespace ExpenseTracker.Controllers
         public IActionResult Edit(int? id)
         {
             if (id == null)
-                return NotFound();
+            {
+                TempData["error"] = "The expense doesn't exist!";
+                return RedirectToAction("List", "Expense");
+            }
             Expense expense = _db.Expenses
                 .Include(ctg => ctg.Category)
                 .Include(wl => wl.Wallet)
@@ -54,8 +66,11 @@ namespace ExpenseTracker.Controllers
             if (expense == null)
                 return NotFound();
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userWallet = _db.Wallets.Where(us => Convert.ToString(us.UserId) == userId).ToList();
+            ViewBag.UserId = userId;
             ViewBag.CategoryId = new SelectList(_db.Categories,"CategoryId","Name",expense.ExpenseId);
-            ViewBag.WalletId = new SelectList(_db.Wallets, "WalletId", "Name", expense.ExpenseId);
+            ViewBag.WalletId = new SelectList(userWallet, "WalletId", "Name", expense.ExpenseId);
             return View(expense);
         }
 
@@ -69,8 +84,11 @@ namespace ExpenseTracker.Controllers
                 TempData["success"] = "Expense updated successfully";
                 return RedirectToAction("List");
             }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userWallet = _db.Wallets.Where(us => Convert.ToString(us.UserId) == userId).ToList();
+            ViewBag.UserId = userId;
             ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name", expense.ExpenseId);
-            ViewBag.WalletId = new SelectList(_db.Wallets, "WalletId", "Name", expense.ExpenseId);
+            ViewBag.WalletId = new SelectList(userWallet, "WalletId", "Name", expense.ExpenseId);
             TempData["error"] = "Error updating expense";
             return View(expense);
         }
@@ -95,12 +113,21 @@ namespace ExpenseTracker.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            List<Expense> expenseList = _db.Expenses
-                .Include(ct=>ct.Category)
-                .Include(wl=>wl.Wallet)
-                .Include(us=>us.User)
-                .ToList();
-            return View(expenseList);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId == null)
+            {
+                TempData["error"] = "User not found";
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                List<Expense> expenseList = _db.Expenses
+                    .Include(ct => ct.Category)
+                    .Include(wl => wl.Wallet)
+                    .Include(us => us.User).Where(us => Convert.ToString(us.UserId) == userId)
+                    .ToList();
+                return View(expenseList);
+            }
         }
 
         [HttpGet]
