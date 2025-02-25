@@ -94,15 +94,15 @@ namespace ExpenseTracker.Controllers
         }
 
         //This method will delete the expense from the database
-        [HttpDelete]
+        [HttpPost]
         public IActionResult Delete(int? id)
         {
-            if(id == null)
+            Expense expense = _db.Expenses.Find(id);
+            if (id == null)
             {
                 TempData["error"] = "Expense not found";
                 return NotFound();
             }
-            Expense expense = _db.Expenses.Find(id);
             _db.Expenses.Remove(expense);
             _db.SaveChanges();
             TempData["success"] = "Expense deleted successfully";

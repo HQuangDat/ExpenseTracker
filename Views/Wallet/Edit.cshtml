@@ -8,46 +8,55 @@
 @if (User.Identity.IsAuthenticated)
 {
     <h1>Edit</h1>
+    <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                    <div class="card" style="border-radius: 15px;">
+                        <div class="card-body p-5">
+                            <h2 class="text-uppercase text-center mb-5">Add Wallet</h2>
 
-    <h4>Wallet</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <input asp-for="WalletId" class="form-control" type="text" value="@ViewBag.WalletId" readonly/>
-                    <span asp-validation-for="WalletId" class="text-danger"></span>
+                            <form asp-action="Edit">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="WalletId" />
+                                <input type="hidden" asp-for="UserId" />
+
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="form-label" asp-for="WalletTypeId">Type</label>
+                                    <select asp-for="WalletTypeId" class="form-control" asp-items="ViewBag.WalletTypeId"></select>
+                                </div>
+
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <input asp-for="Balance" class="form-control form-control-lg " />
+                                    <label class="form-label" asp-for="Balance">Balance</label>
+                                    <span asp-validation-for="Balance" class="text-danger"></span>
+                                </div>
+
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <input asp-for="Name" class="form-control form-control-lg " />
+                                    <label class="form-label" asp-for="Name">Name</label>
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <input asp-for="CreatedAt" class="form-control form-control-lg " readonly />
+                                    <label class="form-label" asp-for="CreatedAt">Create at</label>
+                                </div>
+
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+                                        Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input asp-for="UserId" class="form-control" type="text" value="@ViewBag.UserId" readonly />
-                    <span asp-validation-for="UserId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="WalletTypeId" class="control-label"></label>
-                    <select asp-for="WalletTypeId" class="form-control" asp-items="ViewBag.WalletTypeId"></select>
-                    <span asp-validation-for="WalletTypeId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Balance" class="control-label"></label>
-                    <input asp-for="Balance" class="form-control" />
-                    <span asp-validation-for="Balance" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input asp-for="CreatedAt" class="form-control" type="hidden" />
-                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </form>
+            </div>
         </div>
     </div>
+
+    
 
     <div>
         <a asp-action="List">Back to List</a>

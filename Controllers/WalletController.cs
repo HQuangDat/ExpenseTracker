@@ -73,6 +73,9 @@ namespace ExpenseTracker.Controllers
                 .FirstOrDefault(wl => wl.WalletId == id);
             if (wallet == null)
                 return NotFound();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userId;
+            
             ViewBag.WalletTypeId = new SelectList(_db.WalletTypes, "WalletTypeId", "Name", wallet.WalletTypeId);
             return View(wallet);
         }
