@@ -26,6 +26,7 @@ namespace ExpenseTracker.Data
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0B17940A7A");
+                entity.HasIndex(e => e.Name).IsUnique();
             });
 
             modelBuilder.Entity<Expense>(entity =>
@@ -55,6 +56,7 @@ namespace ExpenseTracker.Data
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C62EC0A9E");
+                entity.HasIndex(e => e.Email).IsUnique();
 
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
@@ -97,6 +99,7 @@ namespace ExpenseTracker.Data
             modelBuilder.Entity<WalletType>(entity =>
             {
                 entity.HasKey(e => e.WalletTypeId).HasName("PK__WalletTy__6807E8B25746FEA8");
+                entity.HasIndex(e => e.Name).IsUnique();
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -421,7 +421,7 @@ select {
 }
 // Set the cursor for non-`<button>` buttons
 //
-// Information at https://github.com/twbs/bootstrap/pull/30562
+// Details at https://github.com/twbs/bootstrap/pull/30562
 [role="button"] {
   cursor: pointer;
 }
@@ -527,7 +527,7 @@ legend {
 
 // 1. This overrides the extra rounded corners on search inputs in iOS so that our
 //    `.form-control` class can properly style them. Note that this cannot simply
-//    be added to `.form-control` as it's not specific enough. For Information, see
+//    be added to `.form-control` as it's not specific enough. For details, see
 //    https://github.com/twbs/bootstrap/issues/11586.
 // 2. Correct the outline style in Safari.
 

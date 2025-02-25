@@ -143,5 +143,33 @@ namespace ExpenseTracker.Controllers
                 return NotFound();
             return View(expense);
         }
+
+        //Statistics method
+        [HttpGet]
+        public IActionResult Statistics()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                TempData["error"] = "User not found";
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                var userExpenses = _db.Expenses
+                    .Include(ct => ct.Category)
+                    .Include(wl => wl.Wallet)
+                    .Include(us => us.User)
+                    .Where(us => Convert.ToString(us.UserId) == userId)
+                    .GroupBy(ct => ct.Category.Name)
+                    .Select(g => new
+                    {
+                        Category = g.Key,
+                        TotalAmount = g.Sum(e => e.Amount) 
+                    })
+                    .ToList();
+                return View(userExpenses);
+            }
+        }
     }
 }

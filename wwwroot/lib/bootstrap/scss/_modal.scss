@@ -41,7 +41,7 @@
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  // Prevent Chrome on Windows from adding a focus outline. For Information, see
+  // Prevent Chrome on Windows from adding a focus outline. For details, see
   // https://github.com/twbs/bootstrap/pull/10951.
   outline: 0;
   // We deliberately don't use `-webkit-overflow-scrolling: touch;` due to a
