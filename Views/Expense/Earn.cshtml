@@ -1,11 +1,11 @@
 ﻿@model ExpenseTracker.Models.Expense
 
 @{
-    ViewData["Title"] = "Add";
+    ViewData["Title"] = "Earn";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if(User.Identity.IsAuthenticated)
+@if (User.Identity.IsAuthenticated)
 {
 
     <div class="mask d-flex align-items-center h-100 gradient-custom-3">
@@ -14,9 +14,9 @@
                 <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                     <div class="card" style="border-radius: 15px;">
                         <div class="card-body p-5">
-                            <h2 class="text-uppercase text-center mb-5">Add Expense</h2>
+                            <h2 class="text-uppercase text-center mb-5">Earn Expense</h2>
 
-                            <form asp-action="Add">
+                            <form asp-action="Earn">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <input type="hidden" asp-for="UserId" class="form-control form-control-lg " value="@ViewBag.UserId" readonly />
@@ -46,7 +46,7 @@
                                 </div>
 
                                 <div data-mdb-input-init class="form-outline mb-4">
-                                    <input type="text" asp-for="Type" class="form-control form-control-lg " value="Spend" readonly/>
+                                    <input type="text" asp-for="Type" class="form-control form-control-lg " value="Earn" readonly />
                                     <label class="form-label" asp-for="Type">Type</label>
                                     <span asp-validation-for="Type" class="text-danger"></span>
                                 </div>
@@ -59,7 +59,7 @@
 
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
-                                        Create
+                                        Submit
                                     </button>
                                 </div>
                             </form>

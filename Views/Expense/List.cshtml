@@ -6,12 +6,10 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-
-    <h1>List</h1>
-
     <p>
         <div class="col-6 text-end">
-            <a class="btn btn-primary" asp-action="Add">Create New</a>
+            <a class="btn btn-primary" asp-action="Add">Spend</a>
+            <a class="btn btn-primary" asp-action="Earn">Earn</a>
         </div>
     </p>
     <table class="table table-responsive table-hover text-center">

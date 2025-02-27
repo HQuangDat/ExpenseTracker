@@ -27,6 +27,10 @@ public partial class Expense
     [Column(TypeName = "datetime")]
     public DateTime Date { get; set; }
 
+    [Required]
+    [StringLength(50)]
+    public string Type { get; set; } = "Add";
+
     [ForeignKey("CategoryId")]
     [InverseProperty("Expenses")]
     public virtual Category? Category { get; set; }

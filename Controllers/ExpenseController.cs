@@ -35,7 +35,45 @@ namespace ExpenseTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                var exWallet = _db.Wallets.FirstOrDefault(wl => wl.WalletId == expense.WalletId);
+                exWallet.Balance -= expense.Amount;
                 _db.Expenses.Add(expense);
+                _db.Wallets.Update(exWallet);
+                _db.SaveChanges();
+                TempData["success"] = "Expense added successfully";
+                return RedirectToAction("List");
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userId;
+            TempData.Add("error", "Error adding expense");
+            var userWallets = _db.Wallets.Where(us => Convert.ToString(us.UserId) == userId).ToList();
+            ViewBag.UserId = userId;
+            ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+            ViewBag.WalletId = new SelectList(userWallets, "WalletId", "Name");
+            return View(expense);
+        }
+
+        //This is Earn Expense Method
+        [HttpGet]
+        public IActionResult Earn()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userWallets = _db.Wallets.Where(us => Convert.ToString(us.UserId) == userId).ToList();
+            ViewBag.UserId = userId;
+            ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+            ViewBag.WalletId = new SelectList(userWallets, "WalletId", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Earn(Expense expense)
+        {
+            if (ModelState.IsValid)
+            {
+                var exWallet = _db.Wallets.FirstOrDefault(wl => wl.WalletId == expense.WalletId);
+                exWallet.Balance += expense.Amount;
+                _db.Expenses.Add(expense);
+                _db.Wallets.Update(exWallet);
                 _db.SaveChanges();
                 TempData["success"] = "Expense added successfully";
                 return RedirectToAction("List");
@@ -98,10 +136,22 @@ namespace ExpenseTracker.Controllers
         public IActionResult Delete(int? id)
         {
             Expense expense = _db.Expenses.Find(id);
+            var delWallet = _db.Wallets.FirstOrDefault(wl=>wl.WalletId == expense.WalletId);
             if (id == null)
             {
                 TempData["error"] = "Expense not found";
                 return NotFound();
+            }
+
+            if(expense.Type == "Earn")
+            {
+                delWallet.Balance -= expense.Amount;
+                _db.Update(delWallet);
+            }
+            else if(expense.Type == "Spend")
+            {
+                delWallet.Balance += expense.Amount;
+                _db.Update(delWallet);
             }
             _db.Expenses.Remove(expense);
             _db.SaveChanges();
