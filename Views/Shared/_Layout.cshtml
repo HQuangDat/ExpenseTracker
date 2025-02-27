@@ -51,7 +51,7 @@
                                 <p>User Profile</p>
                             </a>
                         </li>
-                        @if(User.Identity.AuthenticationType == "Admin")
+                        @if(User.IsInRole("Admin"))
                         {
                             <li>
                                 <a asp-controller="Account" asp-action="List" style="text-decoration:none">
