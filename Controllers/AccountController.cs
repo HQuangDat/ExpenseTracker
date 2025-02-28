@@ -158,6 +158,21 @@ namespace ExpenseTracker.Controllers
             return View(user);
         }
 
+        //Change role to Admin method
+        [HttpPost]
+        public IActionResult Change(int? id)
+        {
+            if (id == null)
+            {
+                TempData["error"] = "User not found";
+                return RedirectToAction("List");
+            }
+            User user = _db.Users.Find(id);
+            user.Roles.Add(_db.Roles.Find(1));
+            _db.SaveChanges();
+            TempData["success"] = "User role changed to Admin";
+            return RedirectToAction("List");
+        }
 
         //This method will return the view for the AccessDenied page
         [HttpGet]
