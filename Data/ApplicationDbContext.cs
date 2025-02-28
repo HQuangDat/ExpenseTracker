@@ -38,9 +38,6 @@ namespace ExpenseTracker.Data
                     .HasMaxLength(50)
                     .HasDefaultValue("Add");
 
-                entity.HasIndex(e => e.Type)
-                    .IsUnique();
-
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Expenses)
                     .HasConstraintName("FK__Expenses__Catego__5070F446");

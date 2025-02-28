@@ -14,7 +14,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
+    <form asp-action="ExportToExcel" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to export this expense?');">
+            Export data to Excel
+        </button>
+    </form>
     <div class="container mt-4">
         <canvas id="expenseChart"></canvas>
     </div>
