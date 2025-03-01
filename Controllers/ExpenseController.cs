@@ -37,7 +37,10 @@ namespace ExpenseTracker.Controllers
             if (ModelState.IsValid)
             {
                 var exWallet = _db.Wallets.FirstOrDefault(wl => wl.WalletId == expense.WalletId);
-                exWallet.Balance -= expense.Amount;
+                if(expense.Type == "Spend")
+                    exWallet.Balance -= expense.Amount;
+                else if(expense.Type == "Earn")
+                    exWallet.Balance += expense.Amount;
                 _db.Expenses.Add(expense);
                 _db.Wallets.Update(exWallet);
                 _db.SaveChanges();
@@ -54,40 +57,6 @@ namespace ExpenseTracker.Controllers
             return View(expense);
         }
 
-        //This is Earn Expense Method
-        [HttpGet]
-        public IActionResult Earn()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userWallets = _db.Wallets.Where(us => Convert.ToString(us.UserId) == userId).ToList();
-            ViewBag.UserId = userId;
-            ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
-            ViewBag.WalletId = new SelectList(userWallets, "WalletId", "Name");
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Earn(Expense expense)
-        {
-            if (ModelState.IsValid)
-            {
-                var exWallet = _db.Wallets.FirstOrDefault(wl => wl.WalletId == expense.WalletId);
-                exWallet.Balance += expense.Amount;
-                _db.Expenses.Add(expense);
-                _db.Wallets.Update(exWallet);
-                _db.SaveChanges();
-                TempData["success"] = "Expense added successfully";
-                return RedirectToAction("List");
-            }
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewBag.UserId = userId;
-            TempData.Add("error", "Error adding expense");
-            var userWallets = _db.Wallets.Where(us => Convert.ToString(us.UserId) == userId).ToList();
-            ViewBag.UserId = userId;
-            ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
-            ViewBag.WalletId = new SelectList(userWallets, "WalletId", "Name");
-            return View(expense);
-        }
         //These two methods will edit the expense in the database
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -216,7 +185,7 @@ namespace ExpenseTracker.Controllers
                     .Select(g => new
                     {
                         Category = g.Key,
-                        TotalAmount = g.Sum(e => e.Amount) 
+                        TotalAmount = g.Sum(e => e.Amount)
                     })
                     .ToList();
                 return View(userExpenses);

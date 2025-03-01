@@ -9,12 +9,14 @@
 {
     <p>
         <div class="col-6 text-end">
-            <a class="btn btn-primary" asp-action="Add">Create New</a>
+            <a class="btn btn-primary" asp-action="Add">Add new Wallet</a>
+            <a class="btn btn-primary" asp-action="AddType">Create new wallet type</a>
+
         </div>
-        @if(User.Identity.AuthenticationType == "Admin")
+        @if(User.IsInRole("Admin"))
         {
             <div class="col-6 text-end">
-                <a class="btn btn-primary" asp-action="AddType">Create new wallet type</a>
+                
             </div>
         }
     </p>
@@ -29,9 +31,6 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CreatedAt)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.User)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.WalletType)
@@ -51,9 +50,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CreatedAt)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.User.Username)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.WalletType.Name)

@@ -46,7 +46,10 @@
                                 </div>
 
                                 <div data-mdb-input-init class="form-outline mb-4">
-                                    <input type="text" asp-for="Type" class="form-control form-control-lg " value="Spend" readonly/>
+                                    <select asp-for="Type" class="form-select form-control-lg">
+                                        <option value="Spend">Spend</option>
+                                        <option value="Earn">Earn</option>
+                                    </select>
                                     <label class="form-label" asp-for="Type">Type</label>
                                     <span asp-validation-for="Type" class="text-danger"></span>
                                 </div>
