@@ -38,7 +38,10 @@ namespace ExpenseTracker.Controllers
             {
                 var exWallet = _db.Wallets.FirstOrDefault(wl => wl.WalletId == expense.WalletId);
                 if(expense.Type == "Spend")
-                    exWallet.Balance -= expense.Amount;
+                {
+                    expense.Amount *= -1;
+                    exWallet.Balance += expense.Amount;
+                }
                 else if(expense.Type == "Earn")
                     exWallet.Balance += expense.Amount;
                 _db.Expenses.Add(expense);

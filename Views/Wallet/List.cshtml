@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ExpenseTracker.Models.Wallet>
 
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "List of Wallets";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,7 +10,7 @@
     <p>
         <div class="col-6 text-end">
             <a class="btn btn-primary" asp-action="Add">Add new Wallet</a>
-            <a class="btn btn-primary" asp-action="AddType">Create new wallet type</a>
+            <a class="btn btn-primary" asp-action="AddType">New type</a>
 
         </div>
         @if(User.IsInRole("Admin"))
@@ -35,7 +35,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.WalletType)
                 </th>
-                <th></th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
